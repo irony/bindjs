@@ -1,11 +1,13 @@
 'use strict';
+var bind = require('./lib/bind');
+var header = require('./partials/header');
+var main = require('./partials/main');
 
-module.exports = {
-  bind: function(div, component){
-    var tree = component.render.bind(component);
-    div.innerHTML = Object.keys(tree).map(this.transform.bind(div.document));
-  },
-  transform: function(item){
-    return this.createElement(item);
-  }
-};
+module.exports = function(div) {
+
+  bind.init(div, {
+    header: header,
+    container: main
+  });
+
+}(document);
