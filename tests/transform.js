@@ -74,7 +74,6 @@ describe('transformer', function() {
       return { ul : {tagName:'li', value:'1'} };
     }};
     var dom = bind.transform(anon);
-    console.log('dom', dom);
     expect(dom[0]).to.have.property('tagName');
     expect(dom[0].tagName).to.eql('ul');
     expect(dom[0].value).to.eql('1');

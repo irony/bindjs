@@ -28,7 +28,7 @@ describe('expand', function() {
     
   });
 
-  it('should render a subcomponent to elements', function () {
+  it('should expand a static object with a dynamic subcomponent', function () {
     var anon = { render: function(){
       return {li:{className: 'test', value:'1'}};
     }};
@@ -41,5 +41,21 @@ describe('expand', function() {
     
   });
 
+  it('should render an array of nodes', function () {
+    var foo = { render: function(){
+      return {li:{className: 'test', value:'1'}};
+    }};
+    var bar = { render: function(){
+      return {li:{className: 'test', value:'2'}};
+    }};
+    var newTree = { ul: [foo,bar] };
+    var tree = bind.expand(newTree);
+    console.log(tree)
+    expect(tree[0], JSON.stringify(tree[0])).to.have.property('length');
+    expect(tree[0].length).to.eql(2);
+    expect(tree[0][0].className).to.eql('test');
+    expect(tree[0][1].value).to.eql('2');
+    
+  });
 
 });
