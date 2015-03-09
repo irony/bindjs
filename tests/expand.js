@@ -34,10 +34,10 @@ describe('expand', function() {
     }};
     var newTree = { ul: anon };
     var tree = bind.expand(newTree);
-    expect(tree[0], JSON.stringify(tree)).to.have.property('children');
-    expect(tree[0].children).to.have.length(1);
-    expect(tree[0].children[0].className).to.eql('test');
-    expect(tree[0].children[0].  value).to.eql('1');
+    expect(tree[0], JSON.stringify(tree)).to.have.property('value');
+    expect(tree[0].value).to.have.length(1);
+    expect(tree[0].value[0].className).to.eql('test');
+    expect(tree[0].value[0].  value).to.eql('1');
     
   });
 
