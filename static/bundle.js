@@ -8,10 +8,10 @@ module.exports = function(div) {
 
   bind.init(div, { 
     app: {
-      value : {
-        header: header,
-        container: main
-      }
+      value : [
+        header,
+        main
+      ]
     }
   });
 
@@ -47,6 +47,7 @@ module.exports = {
       return this.expand(component);
     }
 
+    console.log('component', component);
     return component.length && component || Object.keys(component).reduce(function(a,b){
       component[b].tagName = b;
       if (component[b].render) { 
@@ -66,7 +67,7 @@ module.exports = {
     var tree = this.expand(component);
     var transformNode = function(node){
       var element = this.context.createElement(node.tagName);
-      if (node.value && typeof(node.value) !== 'string') {
+      if (typeof(node.value) === 'object') {
         var subTree = this.transform(node.value || node);
         subTree.map(function(child){
           element.appendChild(child); 

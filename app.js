@@ -7,10 +7,10 @@ module.exports = function(div) {
 
   bind.init(div, { 
     app: {
-      value : {
-        header: header,
-        container: main
-      }
+      value : [
+        header,
+        main
+      ]
     }
   });
 
