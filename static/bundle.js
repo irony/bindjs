@@ -6,28 +6,56 @@ var main = require('./partials/main');
 
 module.exports = function(div) {
 
-  bind.init(div, {
-    header: header,
-    container: main
+  bind.init(div, { 
+    app: {
+      value : {
+        header: header,
+        container: main
+      }
+    }
   });
 
 }(document);
 },{"./lib/bind":"/Users/cln/src/pet/bind/lib/bind.js","./partials/header":"/Users/cln/src/pet/bind/partials/header.js","./partials/main":"/Users/cln/src/pet/bind/partials/main.js"}],"/Users/cln/src/pet/bind/lib/bind.js":[function(require,module,exports){
 'use strict';
 
-var bind = module.exports = {
+var viewcontext = require('./virtualDocument');
+
+module.exports = {
   /**
    * starting point of the lib - gives a starting point in the DOM tree
    * @param  {[type]} div       - a DOM node, for example document.body
    * @param  {[type]} component - a tree or component to start render 
    */
   init: function(document, component){
-    this.document = document;
-    var dom = this.transform(component);
-    document.body.appendChild(dom);
+    this.context = document;
+    if (component){
+      var dom = this.transform(component);
+      document.body.appendChild(dom[0]);
+    }
   },
 
-  document: null,
+  context: viewcontext,
+
+  expand: function(component){
+    if (component.render) {
+      component.render.bind(component);
+      component = component.render();
+      if (Object.keys(component).length !== 1){
+        throw new Error('Root node is required');
+      }
+      return this.expand(component);
+    }
+
+    return component.length && component || Object.keys(component).reduce(function(a,b){
+      component[b].tagName = b;
+      if (component[b].render) { 
+        component[b].children = this.expand(component[b]);
+      }
+      a.push(component[b]);
+      return a; 
+    }.bind(this), []);
+  },
 
   /**
    * Transform a tree of nodes to elements with children accordingly
@@ -35,28 +63,54 @@ var bind = module.exports = {
    * @return {[type]}      [description]
    */
   transform: function(component){
-    var tree = component;
-    if (tree.render) {
-      tree = component.render();
-    }
+    var tree = this.expand(component);
 
-    var array = tree.length && tree || Object.keys(tree).reduce(function(a,b){
-      tree[b].tagName = b; a.push(tree[b]); return a; 
-    }, []);
-
-    return array.map(function(item){
-      var element = bind.document.createElement(item.tagName);
-      if (typeof(item.value) === 'object') {
-        var subTree = bind.transform(item.value);
+    return tree.map(function(item){
+      
+      var element = this.context.createElement(item.tagName);
+      if (typeof(item.value) !== 'string') {
+        var subTree = this.transform(item.value || item);
         subTree.map(function(child){
           element.appendChild(child); 
         });
       } else {
         element.value = item.value;
+        element.innerText = item.value;
         element.className = item.className;
       }
       return element;
-    });
+    }.bind(this));
+  }
+};
+},{"./virtualDocument":"/Users/cln/src/pet/bind/lib/virtualDocument.js"}],"/Users/cln/src/pet/bind/lib/virtualDocument.js":[function(require,module,exports){
+'use strict';
+
+module.exports = {
+  body: {},
+  createElement: function(tagName) {
+    var element = {
+      tagName: tagName,
+      appendChild: function(childElement) {
+        element.children = (element.children || []);
+        element.children.push(childElement);
+      },
+      value: '',
+      get innerHTML() {
+        var inner = element.value;
+        if (element.children && element.children.length) {
+          var childElements = element.children.map(function(childElement) {
+            return childElement.innerHTML;
+          });
+          inner += childElements.join('');
+        }
+        var props = '';
+        if (element.className) {
+          props += ' class="' + element.className + '"';
+        }
+        return '<' + element.tagName + props + '>' + (inner) + '</' + element.tagName + '>';
+      }
+    };
+    return element;
   }
 };
 },{}],"/Users/cln/src/pet/bind/partials/header.js":[function(require,module,exports){
@@ -99,7 +153,7 @@ module.exports = {
       return {
         li: {className: 'item', data: item, onClick: this.handleClick, value: item.name}
       };
-    });
+    }.bind(this));
   }
 };
 },{}],"/Users/cln/src/pet/bind/partials/main.js":[function(require,module,exports){

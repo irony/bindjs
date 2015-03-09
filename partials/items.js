@@ -27,6 +27,6 @@ module.exports = {
       return {
         li: {className: 'item', data: item, onClick: this.handleClick, value: item.name}
       };
-    });
+    }.bind(this));
   }
 };

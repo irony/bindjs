@@ -69,9 +69,48 @@ describe('transformer', function() {
     expect(html[0].innerHTML).to.eql('<ul><li class="item">1</li><li class="item">2</li><li class="item">3</li></ul>');
   });
 
+  it('should handle render function not as a tag', function () {
+    var anon = { render: function(){
+      return {tagName:'li', value:'1'};
+    }};
+    var dom = bind.transform(anon);
+    console.log('dom', dom)
+    expect(dom[0]).to.have.property('tagName');
+    expect(dom[0].tagName).to.eql('li');
+    expect(dom[0].value).to.eql('1');
+  });
+
+  it('should render a component to elements', function () {
+    var anon = { render: function(){
+      return {li:{className: 'test', value:'1'}};
+    }};
+    var dom = bind.transform(anon);
+    expect(dom[0]).to.have.property('tagName');
+    expect(dom[0].tagName).to.eql('li');
+    expect(dom[0]).to.have.property('className');
+    expect(dom[0].className).to.eql('test');
+    expect(dom[0].value).to.eql('1');
+    
+  });
+
   it('should render and transform a component to html', function() {
     var html = bind.transform(component);
     expect(html[0].innerHTML).to.eql('<ul><li class="item">1</li><li class="item">2</li><li class="item">3</li></ul>');
   });
+
+
+  it('should render a subcomponent to elements', function () {
+    var anon = { render: function(){
+      return {li:{className: 'test', value:'1'}};
+    }};
+    var newTree = { list: anon };
+    var dom = bind.transform(newTree);
+    expect(dom[0]).to.have.property('children');
+    expect(dom[0].children).to.have.length(1);
+    expect(dom[0].children[0].className).to.eql('test');
+    expect(dom[0].children[0].  value).to.eql('1');
+    
+  });
+
 
 });

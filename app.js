@@ -5,9 +5,13 @@ var main = require('./partials/main');
 
 module.exports = function(div) {
 
-  bind.init(div, {
-    header: header,
-    container: main
+  bind.init(div, { 
+    app: {
+      value : {
+        header: header,
+        container: main
+      }
+    }
   });
 
 }(document);
