@@ -1,5 +1,5 @@
 'use strict';
-var bind = require('./lib/bind');
+var bind = require('../');
 var header = require('./partials/header');
 var main = require('./partials/main');
 

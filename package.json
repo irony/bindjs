@@ -1,8 +1,8 @@
 {
-  "name": "bindjs",
+  "name": "boundjs",
   "version": "0.0.1",
-  "description": "",
-  "main": "app.js",
+  "description": "Super lightweight react-like lib for keeping a json tree bound to DOM",
+  "main": "index.js",
   "directories": {
     "test": "tests"
   },
