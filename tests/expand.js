@@ -41,7 +41,7 @@ describe('expand', function() {
     
   });
 
-  it('should render an array of nodes', function () {
+  xit('should render an array of nodes', function () {
     var foo = { render: function(){
       return {li:{className: 'test', value:'1'}};
     }};

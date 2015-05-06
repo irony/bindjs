@@ -7,11 +7,12 @@
     "test": "tests"
   },
   "dependencies": {
+  },
+  "devDependencies": {
     "chai": "^2.1.1",
     "sinon-chai": "^2.7.0",
     "sinon": "^1.13.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
