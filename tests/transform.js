@@ -51,6 +51,13 @@ describe('transformer', function() {
     expect(html[0].innerHTML).to.eql('<li>1</li>');
   });
 
+  it('should transform a text node to a element', function() {
+    var html = bind.transform({
+      li: '1'
+    });
+    expect(html[0].innerHTML).to.eql('<li>1</li>');
+  });
+
   it('should transform two nested nodes to one element', function() {
     var html = bind.transform({
       li: {
