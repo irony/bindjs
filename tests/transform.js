@@ -2,7 +2,7 @@
 
 var bind = require('../lib/bind');
 var expect = require('chai').expect;
-var vdocument = require('../lib/virtualDocument');
+var vdocument = require('../lib/transforms/html');
 
 describe('transformer', function() {
   var tree, component, body;

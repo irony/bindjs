@@ -79,7 +79,7 @@ Or:
     {
       table: {
         tr: [
-          { td: { value: 'foo' }},
+          { td: 'foo'}, // or..
           { td: { value: 'bar' }},
         }
       }
